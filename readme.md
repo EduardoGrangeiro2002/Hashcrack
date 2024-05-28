@@ -47,5 +47,3 @@ cargo build --release
 > **Aviso:** Este programa é destinado apenas para fins educacionais e de pesquisa. O uso indevido para quebrar senhas de terceiros é ilegal e antiético.
 
 ---
-
-Aqui está o arquivo Markdown gerado com o texto aprimorado.
