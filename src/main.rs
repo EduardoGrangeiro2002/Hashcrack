@@ -5,19 +5,19 @@ mod maestro;
 use encoding_rs_io::DecodeReaderBytesBuilder;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
-use std::sync::mpsc::sync_channel;
+use std::sync::mpsc::channel;
 use crate::maestro::maestro::Maestro;
-
+use num_cpus;
 fn main() -> io::Result<()> {
     let hash = "bebe5df1ad650edd0c017aaad908fb14";
     let md5 = "md5";
-    let num_core = 1;
+    let num_core = num_cpus::get();
     let mut actual_core = 0;
     let file = File::open("./file/rockyou.txt").expect("Arquivo não encontrado!");
     let reader = BufReader::new(DecodeReaderBytesBuilder::new().build(file));
     let mut senders = Vec::new();
     for _ in 0..num_core {
-        let ( sender, receiver ) = sync_channel::<(String, String, String)>(1);
+        let ( sender, receiver ) = channel::<(String, String, String)>();
         senders.push(sender);
         Maestro::start_thread(receiver);
     }
