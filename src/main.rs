@@ -9,19 +9,18 @@ use std::sync::mpsc::sync_channel;
 use crate::maestro::maestro::Maestro;
 
 fn main() -> io::Result<()> {
-    let hash = "e7d80ffeefa212b7c5c55700e4f7193e";
+    let hash = "bebe5df1ad650edd0c017aaad908fb14";
     let md5 = "md5";
-    let num_core = 4;
+    let num_core = 1;
     let mut actual_core = 0;
     let file = File::open("./file/rockyou.txt").expect("Arquivo não encontrado!");
     let reader = BufReader::new(DecodeReaderBytesBuilder::new().build(file));
     let mut senders = Vec::new();
-    for _ in 1..num_core {
+    for _ in 0..num_core {
         let ( sender, receiver ) = sync_channel::<(String, String, String)>(1);
         senders.push(sender);
         Maestro::start_thread(receiver);
     }
-
     for line in reader.lines() {
         let line = line.expect("Erro ao ler a linha");
         let _= senders[actual_core].send((line, hash.to_string(), md5.to_string()));
